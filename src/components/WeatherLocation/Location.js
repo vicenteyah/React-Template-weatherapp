@@ -2,7 +2,7 @@ import React from 'react';
 
 //parámetro con object destrcting
 const Location = ({city}) => (
-    <div>
+    <div className="locationCont">
         <h1>
             {city}
         </h1>
