@@ -4,8 +4,9 @@ import WeatherData from "./WeatherData";
 import './styles.css';
 
 import {
-    SUN, WINDY,
+    SUN, 
 } from './../../constans/weathers';
+import { resolve } from 'dns';
 
 const location = "Merida,MX";
 const api_key = "449b543c7605df17ade6147db618b87c";
@@ -19,12 +20,6 @@ const data ={
     humidity: 20,
     wind:'10m/s'
 }
-const data2 = {
-    temperature: 18,
-    weatherState: WINDY,
-    humidity: 20,
-    wind: '10m/s'
-}
 
 class WeatherLocation extends Component{
     /*Constructor*/
@@ -35,14 +30,34 @@ class WeatherLocation extends Component{
             data: data,
         };
     }
-    handleUpdateClick =()=>{
-        fetch(api_weather);
-        console.log("refreshing......>:v")
-        this.setState({
-            city: 'Mérida!',
-            data: data2
+    getData = weather_data =>{
+        const {humidity, temp} = weather_data.main;
+        const {speed} = weather_data.wind;
+        const weatherState = SUN;
+
+        const data = {
+            humidity,
+            temperature: temp,
+            weatherState,
+            wind: `${speed} m/s`,
+        }
+        return data;
+    }
+    handleUpdateClick = ()=>{
+
+        fetch(api_weather).then(resolve => {
+           return resolve.json();
+        }).then(data => {
+            
+            const newWeather = this.getData(data);
+            console.log(newWeather);
+            debugger;
+            this.setState({
+                data: newWeather
+            });
             
         });
+
  
     }
     render(){
