@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Location from "./Location";
 import WeatherData from "./WeatherData";
 import './styles.css';
-import convert from 'convert-units';
+import transformWeather from './../../services/transformWeather'
 import {
     SUN, 
 } from './../../constans/weathers';
@@ -30,29 +30,14 @@ class WeatherLocation extends Component{
             data: data,
         };
     }
-    getTemp = kelvin => {
-        return Number(convert(kelvin).from("K").to("C").toFixed(2));
-    }
-    getData = weather_data =>{
-        const {humidity, temp} = weather_data.main;
-        const {speed} = weather_data.wind;
-        const weatherState = SUN;
-        const temperature = this.getTemp(temp);
-        const data = {
-            humidity,
-            temperature,
-            weatherState,
-            wind: `${speed} m/s`,
-        }
-        return data;
-    }
+
     handleUpdateClick = ()=>{
 
         fetch(api_weather).then(resolve => {
            return resolve.json();
         }).then(data => {
             
-            const newWeather = this.getData(data);
+            const newWeather = transformWeather(data);
             console.log(newWeather);
            // debugger;
             this.setState({
