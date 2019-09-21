@@ -2,17 +2,12 @@ import React, { Component } from 'react';
 import Location from "./Location";
 import WeatherData from "./WeatherData";
 import './styles.css';
-import transformWeather from './../../services/transformWeather'
+import { api_weather }from './../../constans/api_url';
+import transformWeather from './../../services/transformWeather';
 import {
     SUN, 
 } from './../../constans/weathers';
 //import { resolve } from 'dns';
-
-const location = "Merida,MX";
-const api_key = "449b543c7605df17ade6147db618b87c";
-const url_base_weather = "http://api.openweathermap.org/data/2.5/weather";
-
-const api_weather = `${url_base_weather}?q=${location}&APPID=${api_key}`;
 
 const data ={
     temperature: 28,
@@ -29,14 +24,29 @@ class WeatherLocation extends Component{
             city: 'Mérida',
             data: data,
         };
+        console.log("constructor");
     }
-
+    componentDidMount() {
+        console.log("componentDidMount");
+    }
+    componentDidUpdate(prevProps, prevState){
+        console.log("componentDidUpdate");
+    }
+    
+    componentWillMount() {
+        console.log("UNSAFE componentDidMount") 
+    }
+    componentWillUpdate(nextProps, nextState) {
+        console.log("UNSAFE componentWillUpdate");
+    }
+    
+    
     handleUpdateClick = ()=>{
 
         fetch(api_weather).then(resolve => {
            return resolve.json();
         }).then(data => {
-            
+
             const newWeather = transformWeather(data);
             console.log(newWeather);
            // debugger;
@@ -49,6 +59,7 @@ class WeatherLocation extends Component{
  
     }
     render(){
+        console.log("render");
         const { city, data} = this.state;
         return(
             <div className = "weatherLocationCont">
