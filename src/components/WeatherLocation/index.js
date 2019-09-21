@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Location from "./Location";
 import WeatherData from "./WeatherData";
 import './styles.css';
-
+import convert from 'convert-units';
 import {
     SUN, 
 } from './../../constans/weathers';
-import { resolve } from 'dns';
+//import { resolve } from 'dns';
 
 const location = "Merida,MX";
 const api_key = "449b543c7605df17ade6147db618b87c";
@@ -30,14 +30,17 @@ class WeatherLocation extends Component{
             data: data,
         };
     }
+    getTemp = kelvin => {
+        return Number(convert(kelvin).from("K").to("C").toFixed(2));
+    }
     getData = weather_data =>{
         const {humidity, temp} = weather_data.main;
         const {speed} = weather_data.wind;
         const weatherState = SUN;
-
+        const temperature = this.getTemp(temp);
         const data = {
             humidity,
-            temperature: temp,
+            temperature,
             weatherState,
             wind: `${speed} m/s`,
         }
@@ -51,7 +54,7 @@ class WeatherLocation extends Component{
             
             const newWeather = this.getData(data);
             console.log(newWeather);
-            debugger;
+           // debugger;
             this.setState({
                 data: newWeather
             });
